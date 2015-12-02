@@ -1,0 +1,103 @@
+.h5p-hangman {
+  width: 32em;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 4px #ccc;
+}
+
+.h5p-hangman .hangman-text {
+  width: auto;
+  margin: 1em;
+  font-family: fantasy;
+  font-size: 1.25em;
+  font-weight: bold;
+  line-height: 1.5em;
+  text-align: center;
+}
+
+#h5p-hangman-main {
+  display:flex;
+  min-height:20em;
+  max-width:32em;
+  margin: 0px;
+  padding: 0px;
+  flex-flow: row;
+}
+
+#h5p-hangman-graf {
+  width:20em;
+  max-width: 20em;
+  height: 20em;
+  min-height:20em;
+  flex:2;
+  order:1;
+}
+
+#h5p-hangman-alphabeth {
+  position:relative;
+  width:20em;
+  height: 20em;
+  min-height:12em;
+  flex:1;
+  order:2;
+}
+
+.h5p-hangman-freebok {
+  position:absolute;
+  display:block;
+  color:green;
+  width:1.2em;
+  height:1.2em;
+  margin: 3px;
+  padding:2px;
+  font-size:1.2em;
+}
+
+#h5p-hangman-bokstaver {
+  height:2em;
+}
+
+.h5p-hangman-blowy {
+  animation: blowme 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes blowme {
+  100% {  top:5em; opacity:0; font-size:4em; color:red; }
+}
+
+.h5p-hangman-droppy {
+  animation: dropme 3s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes dropme {
+  80% { opacity:0.7;  }
+  100% { top:5em; opacity:0; font-size:3em; }
+}
+
+.h5p-hangman-bokstav {
+  float:left;
+  width: 1.2em;
+  height:1.9em;
+  margin-right:5px;
+  border-bottom:solid 2px black;
+}
+
+.h5p-hangman-space {
+  float:left;
+  width: 1.2em;
+  height:1.9em;
+  margin-right:5px;
+  border-bottom:solid 1px rgba(3,3,3,0.1);
+}
+
+@media all and (max-width: 32em) {
+   #h5p-hangman-main {
+            flex-direction: column;
+   }
+
+   #h5p-hangman-graf,#h5p-hangman-alphabeth {
+            order: 0;
+   }
+}

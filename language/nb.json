@@ -1,0 +1,24 @@
+{
+  "semantics": [
+    {
+    "label": "Hangman tittel",
+    "default": "Hangman",
+    "description": "Tittel som vist til bruker"
+  },
+  {
+    "label": "Beskrivelse",
+    "default": "Gjett riktig ord",
+    "description": "Beskrivelse av mål-ord (byer i norge. osv)"
+  },
+  {
+    "label": "Alfabet",
+    "default": "abcdefghijklmnopqrstuvwxyzøæå",
+    "description": "Bokstaver brukt i ord"
+  },
+  {
+    "label": "Ordliste",
+    "placeholder": "oslo,bergen,trondheim",
+    "description": "Komma separerte ord"
+  }
+  ]
+}

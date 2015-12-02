@@ -1,0 +1,30 @@
+[
+  {
+    "label": "Hangman title",
+    "name": "greeting",
+    "type": "text",
+    "default": "Hangman",
+    "description": "Title shown to the end user."
+  },
+  {
+    "label": "Description",
+    "name": "describe",
+    "type": "text",
+    "default": "Guess the word",
+    "description": "Description of word-set (cities of the world etc)"
+  },
+  {
+    "label": "Alphabeth",
+    "name": "alphabeth",
+    "type": "text",
+    "default": "abcdefghijklmnopqrstuvwxyz",
+    "description": "Characters used in words."
+  },
+  {
+    "label": "Words",
+    "name": "wordlist",
+    "type": "text",
+    "placeholder": "oslo,bergen,trondheim",
+    "description": "Comma separated list of words used by hangman"
+  }
+]

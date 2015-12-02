@@ -1,0 +1,21 @@
+{
+  "title": "Hangman",
+  "description": "Hangman word guessing game",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 0,
+  "runnable": 1,
+  "author": "Audun Hauge",
+  "license": "cc-by-sa",
+  "machineName": "H5P.Hangman",
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 0
+  },
+  "preloadedJs": [
+    { "path": "hangman.js" }
+  ],
+  "preloadedCss": [
+    {"path": "hangman.css"}
+  ]
+}
