@@ -123,7 +123,7 @@ H5P.Hangman = (function($) {
     // Uniq is a list of uniq chars in word
     gameState.guessed = [];   // Array of correct guesses
     gameState.state = STARTING;
-    visLedig();
+    showFree();
   }
 
   /**
@@ -132,7 +132,7 @@ H5P.Hangman = (function($) {
    */
   function playGame() {
     gameState.draw(gameState.failed,gameState.attempts);
-    visBokstaver(gameState.word);
+    showLetters(gameState.word);
     if (gameState.correct === true) {
       gameWin();
     } else if (gameState.failed >= gameState.attempts) {
@@ -230,13 +230,13 @@ H5P.Hangman = (function($) {
     // So user can see correct word
     gameState.state = FAILED;
     gameState.loss++;
-    visBokstaver(gameState.word);
+    showLetters(gameState.word);
   }
 
   /**
    * Show unused chars
    */
-  function visLedig() {
+  function showFree() {
     var s = '';
     gameState.free.forEach(function(ch) {
       s += '<span class="h5p-hangman-freebok">' + ch + '</span>';
@@ -269,7 +269,7 @@ H5P.Hangman = (function($) {
    *
    * @param {string}  word
    */
-  function visBokstaver(word) {
+  function showLetters(word) {
     var bs = word.split('');
     gameState.correct = true;
     gameState.divBok.innerHTML = '';
