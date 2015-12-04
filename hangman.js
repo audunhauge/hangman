@@ -63,11 +63,12 @@ H5P.Hangman = (function($) {
     /**
      * Drawing function with hang as closure
      *
-     * @param {number} n int length of hangman to draw
+     * @param {number} n  int count of failed chars
+     * @param {number} m  int maximum allowed failures
      */
-    return function(n) {
+    return function(n,m) {
       var i;
-      n = Math.min(n,hang.length - 1);
+      n = Math.min(hang.length - 1, Math.floor(hang.length / m) * n);
       ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
       // Start on clean canvas
 
@@ -130,11 +131,11 @@ H5P.Hangman = (function($) {
    * activated by useChar()
    */
   function playGame() {
-    gameState.draw(gameState.failed);
+    gameState.draw(gameState.failed,gameState.attempts);
     visBokstaver(gameState.word);
     if (gameState.correct === true) {
       gameWin();
-    } else if (gameState.failed > 11) {
+    } else if (gameState.failed >= gameState.attempts) {
       gameLost();
     }
   }
@@ -143,13 +144,17 @@ H5P.Hangman = (function($) {
    * The attempt is over, show results and button to start new game
    */
   function newGame() {
-    var s =  '<button id="h5p-hangman-neword" type="button">' 
+    var s =  '<div class="h5p-hangman-feedback">'
+             + '<button id="h5p-hangman-neword" type="button">'
              + _ui.tryAgainButton + '</button>';
-    s += 'Antall ord ' + (gameState.loss + gameState.win);
-    s += _ui.correctCount + ' : ' + gameState.win;
-    s += _ui.errorCount + ' : ' + gameState.loss;
+    s += '<div>' + _ui.wordCount + ' : '
+                  + (gameState.loss + gameState.win) + '</div>';
+    s += '<div>' + _ui.correctCount + ' : ' + gameState.win + '</div>';
+    s += '<div>' + _ui.errorCount + ' : ' + gameState.loss + '</div>';
+    s += '</div>';
     gameState.divAlphabeth.innerHTML = s;
-    document.querySelector('#h5p-hangman-neword').addEventListener('click',newWord);
+    document.querySelector('#h5p-hangman-neword')
+            .addEventListener('click',newWord);
   }
 
   /**
@@ -305,6 +310,7 @@ H5P.Hangman = (function($) {
     $container.append('<div class="hangman-text">'
              + this.options.greeting + '</div>' + game);
     gameState.words = this.options.wordlist.split(',');
+    gameState.attempts = this.options.attempts || 6;
     gameState.alphabeth = this.options.alphabeth
                           || 'abcdefghijklmnopqrstuvwxyz';
     console.log(this.options);

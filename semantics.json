@@ -24,8 +24,19 @@
     "label": "Words",
     "name": "wordlist",
     "type": "text",
-    "placeholder": "oslo,bergen,trondheim",
+    "default": "oslo,bergen,trondheim",
     "description": "Comma separated list of words used by hangman"
+  },
+  {
+    "label": "Attempts",
+    "name": "attempts",
+    "type": "number",
+    "min": 1,
+    "max": 10,
+    "step": 1,
+    "decimals": 0,
+    "default": 6,
+    "description": "How many incorrect chars before fail"
   },
   {
     "name": "UI",
@@ -38,6 +49,12 @@
         "type": "text",
         "label": "Correct answer label",
         "default": "Correct"
+      },
+      {
+        "name": "wordCount",
+        "type": "text",
+        "label": "Number of words tried label",
+        "default": "Words attempted"
       },
       {
         "name": "wrong",
