@@ -26,5 +26,43 @@
     "type": "text",
     "placeholder": "oslo,bergen,trondheim",
     "description": "Comma separated list of words used by hangman"
+  },
+  {
+    "name": "UI",
+    "type": "group",
+    "label": "User interface translation for hangman",
+    "common": true,
+    "fields": [
+      {
+        "name": "correct",
+        "type": "text",
+        "label": "Correct answer label",
+        "default": "Correct"
+      },
+      {
+        "name": "wrong",
+        "type": "text",
+        "label": "Wrong answer label",
+        "default": "Wrong"
+      },
+      {
+        "name": "correctCount",
+        "type": "text",
+        "label": "Correct word count label",
+        "default": "Words correct"
+      },
+      {
+        "name": "errorCount",
+        "type": "text",
+        "label": "Incorrect word count label",
+        "default": "Words failed"
+      },
+      {
+        "name": "tryAgainButton",
+        "type": "text",
+        "label": "Retry button label",
+        "default": "Retry"
+      }
+    ]   
   }
 ]

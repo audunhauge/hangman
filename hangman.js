@@ -3,6 +3,7 @@ var H5P = H5P || {};
 H5P.Hangman = (function($) {
 
   var gameState = {};   // Keep track of score,words seen etc
+  var _ui;              // Grab hold of UI for text
   var STARTING = 'STARTING';
   var FAILED   = 'FAILED';
 
@@ -23,7 +24,8 @@ H5P.Hangman = (function($) {
    *
    * @private
    */
-  function setup() {
+  function setup(ui) {
+    _ui = ui;
     var ctx = document.getElementById('h5p-hangman-graf').getContext('2d');
     gameState.draw = prepDraw(ctx);           // Initialize drawing state
     gameState.divAlphabeth = document.querySelector('#h5p-hangman-alphabeth');
@@ -40,11 +42,12 @@ H5P.Hangman = (function($) {
    *
    * @private
    * @param {Context2d} ctx  2d context for canvas
-   * @returns {func} function clusure for drawing hangman
+   * @returns {func} function closure for drawing hangman
    */
   function prepDraw(ctx) {
     var hang = [];
     ctx.lineWidth = 4;
+    // Very rough drawing as a start
     hang.push(function() { ctx.lineTo(120.5,50);});
     hang.push(function() { ctx.lineTo(120.5,20);});
     hang.push(function() { ctx.lineTo(150.5,20);});
@@ -66,12 +69,16 @@ H5P.Hangman = (function($) {
       var i;
       n = Math.min(n,hang.length - 1);
       ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+      // Start on clean canvas
+
       ctx.fillStyle = 'rgba(30,153,255,0.8)';
       ctx.fillRect(18.5, 120, 190.5, 4);
+      // Draw a base for the hangman to stand on
+
       ctx.beginPath();
       ctx.moveTo(120, 120);
       for (i = 0; i < n; i++) {
-        hang[i]();
+        hang[i]();  // Draw as many segments as specified by n
       }
       ctx.stroke();
     }
@@ -84,16 +91,16 @@ H5P.Hangman = (function($) {
   function newWord() {
     var i = 0;
     var word;
+    var search = true;
     var words = gameState.words;
-    while (i < 20 && !word) {
+    while (i < 20 && search) {
       word = words[ Math.floor(Math.random() * words.length )];
       word = word.replace(/ +/g,' ');  // Trim duplix space
-      if (gameState.seenWords.indexOf(word) >= 0) {
-        word = null;
-      }
+      search = gameState.seenWords.indexOf(word) >= 0;
       i++;
     }
     if (i < 20) {
+      // This is a new word, remember it
       gameState.seenWords.push(word);
     }
     initGame(word.toLowerCase());
@@ -106,8 +113,9 @@ H5P.Hangman = (function($) {
    * @param{string} word - word to guess
    */
   function initGame(word) {
-    gameState.failed = 0;
-    gameState.free = 'abcdefghijklmnopqrstuvwxyzæøå'.split('');
+    gameState.failed = 0;   // Number of failed chars
+    gameState.free = gameState.alphabeth.split('');
+    // Unused chars
     gameState.word = word;
     gameState.uniq = word.split('').sort()
         .filter(function(e, i, ch) { return (i == 0 || e != ch[i - 1]); });
@@ -135,10 +143,11 @@ H5P.Hangman = (function($) {
    * The attempt is over, show results and button to start new game
    */
   function newGame() {
-    var s =  '<button id="h5p-hangman-neword" type="button">Nytt ord</button>';
+    var s =  '<button id="h5p-hangman-neword" type="button">' 
+             + _ui.tryAgainButton + '</button>';
     s += 'Antall ord ' + (gameState.loss + gameState.win);
-    s += 'Win:' + gameState.win;
-    s += 'Loss:' + gameState.loss;
+    s += _ui.correctCount + ' : ' + gameState.win;
+    s += _ui.errorCount + ' : ' + gameState.loss;
     gameState.divAlphabeth.innerHTML = s;
     document.querySelector('#h5p-hangman-neword').addEventListener('click',newWord);
   }
@@ -149,15 +158,27 @@ H5P.Hangman = (function($) {
   function gameWin() {
     var i;
     var ch;
+    var unused = false;
     var letters = document.querySelectorAll('#h5p-hangman-alphabeth > span');
+    // Append a div to display "Correct""
+    var divCorrect = document.createElement('div');
+    divCorrect.innerHTML = _ui.correct;
+    divCorrect.classList.add('h5p-hangman-correct');
+    document.querySelector('#h5p-hangman-alphabeth').appendChild(divCorrect);
+    // The word "Correct" should now animate to visible
+    gameState.win ++;
     for (i = 0; i < letters.length; i++) {
       ch = letters[i];
       if (ch.innerHTML != '') {
+        unused = true;
         ch.classList.add('h5p-hangman-droppy');
       }
-    };
-    ch.addEventListener('animationend',newGame);
-    gameState.win ++;
+    }
+    if (unused) {
+      ch.addEventListener('animationend',newGame);
+    } else {
+      newGame();
+    }
   }
 
   /**
@@ -212,15 +233,8 @@ H5P.Hangman = (function($) {
    */
   function visLedig() {
     var s = '';
-    var dx;
-    var dy;
-    var i = 0;
     gameState.free.forEach(function(ch) {
-      dy = Math.floor(i / 7) * 24;
-      dx = (i % 7) * 24;
-      s += '<span style="top:' + dy + 'px; left:' + dx 
-           + 'px;" class="h5p-hangman-freebok">' + ch + '</span>';
-      i++;
+      s += '<span class="h5p-hangman-freebok">' + ch + '</span>';
     })
     gameState.divAlphabeth.innerHTML = s;
   }
@@ -291,7 +305,10 @@ H5P.Hangman = (function($) {
     $container.append('<div class="hangman-text">'
              + this.options.greeting + '</div>' + game);
     gameState.words = this.options.wordlist.split(',');
-    setup();
+    gameState.alphabeth = this.options.alphabeth
+                          || 'abcdefghijklmnopqrstuvwxyz';
+    console.log(this.options);
+    setup(this.options.UI);
   };
 
   return C;
