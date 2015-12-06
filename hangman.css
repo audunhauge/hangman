@@ -15,7 +15,7 @@
   text-align: center;
 }
 
-#h5p-hangman-main {
+.h5p-hangman-main {
   display:flex;
   min-height:20em;
   max-width:32em;
@@ -24,7 +24,7 @@
   flex-flow: row;
 }
 
-#h5p-hangman-graf {
+.h5p-hangman-graf {
   width:20em;
   max-width: 20em;
   height: 20em;
@@ -33,7 +33,7 @@
   order:1;
 }
 
-#h5p-hangman-alphabeth {
+.h5p-hangman-alphabeth {
   position:relative;
   min-height:8em;
   flex:1;
@@ -49,7 +49,7 @@
   box-shadow: 2px 2px 2px rgba(3,3,3,0.3)
 }
 
-.h5p-hangman-freebok {
+.h5p-hangman-freechar {
   position: relative;
   display:block;
   color:green;
@@ -61,7 +61,7 @@
   float:left;
 }
 
-#h5p-hangman-bokstaver {
+.h5p-hangman-letters {
   height:2em;
 }
 
@@ -98,7 +98,7 @@
   100% { opacity:0; font-size:0; }
 }
 
-.h5p-hangman-bokstav {
+.h5p-hangman-letter {
   float:left;
   width: 1.2em;
   height:1.9em;
@@ -115,11 +115,11 @@
 }
 
 @media all and (max-width: 32em) {
-   #h5p-hangman-main {
+   .h5p-hangman-main {
             flex-direction: column;
    }
 
-   #h5p-hangman-graf,#h5p-hangman-alphabeth {
+   .h5p-hangman-graf,.h5p-hangman-alphabeth {
             order: 0;
    }
 }
