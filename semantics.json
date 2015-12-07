@@ -23,9 +23,32 @@
   {
     "label": "Words",
     "name": "wordlist",
-    "type": "text",
-    "default": "oslo,bergen,trondheim",
-    "description": "Comma separated list of words used by hangman"
+    "type": "list",
+    "entity":"Wordlist",
+    "description": "Groups of comma separated words. Each group can have optional hint.",
+    "min":1,
+    "field": {
+       "label":"Wordgroup",
+       "type":"group",
+       "name":"wordgroup",
+       "fields": [
+          {
+           "name":"words",
+           "type":"text",
+           "placeholder":"words,to,guess",
+           "description":"Comma separated list of words",
+           "label":"Word group"
+          },
+          {
+           "name":"hint",
+           "type":"text",
+           "placeholder":"helpful hint",
+           "description":"Hint to help the user guess the word",
+           "label":"Help hint",
+           "optional":true
+          }
+        ]
+      }
   },
   {
     "label": "Attempts",
@@ -37,6 +60,13 @@
     "decimals": 0,
     "default": 6,
     "description": "How many incorrect chars before fail"
+  },
+  {
+    "label": "Use hints",
+    "name": "useHints",
+    "type": "boolean",
+    "default": false,
+    "description": "Check to enable use of hints"
   },
   {
     "name": "UI",
@@ -80,6 +110,6 @@
         "label": "Retry button label",
         "default": "Retry"
       }
-    ]   
+    ]
   }
 ]

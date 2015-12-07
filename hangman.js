@@ -21,13 +21,30 @@ H5P.Hangman = (function($) {
    */
   function setup(options, myId) {
     // qs prefix stands for querySelector
-    
+
     var gameState = {};        // Keep track of score,words seen etc
     var _ui = options.UI;              // Grab hold of UI for text
     var STARTING = 'STARTING';
     var FAILED = 'FAILED';
-    
-    gameState.words = options.wordlist.split(',');
+
+    // gameState.words = options.wordlist.split(',');
+    // Wordlist is now an array of words + optional hint
+    if (options.useHints) {
+      gameState.words = options.wordlist.reduce(function(res, ar) {
+        var ws = ar.words.split(',');
+        if (ar.hint) {  // A hint is defined for this group
+          res[ar.hint] = ws;
+        } else {
+          res.nohint = res.nohint ? res.nohint.concat(ws) : ws;
+        }
+      } ,{});
+    } else {
+      gameState.words = { nohint: options.wordlist.reduce(function(tot, ar) {
+        var ws = ar.words.split(',');
+        return tot.concat(ws);
+      } ,[]), };
+    }
+    console.log(gameState);
     gameState.attempts = options.attempts || 6;
     gameState.alphabeth = options.alphabeth
                           || 'abcdefghijklmnopqrstuvwxyz';
@@ -56,25 +73,25 @@ H5P.Hangman = (function($) {
       var hang = [];
       ctx.lineWidth = 4;
       // Very rough drawing as a start
-      hang.push(function () { ctx.lineTo(120.5, 50); });
-      hang.push(function () { ctx.lineTo(120.5, 20); });
-      hang.push(function () { ctx.lineTo(150.5, 20); });
-      hang.push(function () { ctx.lineTo(150.5, 50); });
-      hang.push(function () { ctx.arc(150, 60, 10, 0, 2 * Math.PI, true); });
-      hang.push(function () { ctx.lineTo(150.5, 70); });
-      hang.push(function () { ctx.lineTo(150.5, 90); });
-      hang.push(function () { ctx.lineTo(160.5, 100); ctx.moveTo(150.5, 90); });
-      hang.push(function () { ctx.lineTo(140.5, 100); });
-      hang.push(function () { ctx.moveTo(150.5, 70); ctx.lineTo(130.5, 80); });
-      hang.push(function () { ctx.moveTo(150.5, 70); ctx.lineTo(170.5, 80); });
-      hang.push(function () { ctx.moveTo(150.5, 70); ctx.lineTo(170.5, 80); });
+      hang.push(function() { ctx.lineTo(120.5, 50); });
+      hang.push(function() { ctx.lineTo(120.5, 20); });
+      hang.push(function() { ctx.lineTo(150.5, 20); });
+      hang.push(function() { ctx.lineTo(150.5, 50); });
+      hang.push(function() { ctx.arc(150, 60, 10, 0, 2 * Math.PI, true); });
+      hang.push(function() { ctx.lineTo(150.5, 70); });
+      hang.push(function() { ctx.lineTo(150.5, 90); });
+      hang.push(function() { ctx.lineTo(160.5, 100); ctx.moveTo(150.5, 90); });
+      hang.push(function() { ctx.lineTo(140.5, 100); });
+      hang.push(function() { ctx.moveTo(150.5, 70); ctx.lineTo(130.5, 80); });
+      hang.push(function() { ctx.moveTo(150.5, 70); ctx.lineTo(170.5, 80); });
+      hang.push(function() { ctx.moveTo(150.5, 70); ctx.lineTo(170.5, 80); });
       /**
        * Drawing function with hang as closure
        *
        * @param {number} n  int count of failed chars
        * @param {number} m  int maximum allowed failures
        */
-      return function (n, m) {
+      return function(n, m) {
         var i;
         n = Math.min(hang.length - 1, Math.floor(hang.length / m) * n);
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -127,7 +144,7 @@ H5P.Hangman = (function($) {
       // Unused chars
       gameState.word = word;
       gameState.uniq = word.split('').sort()
-        .filter(function (e, i, ch) { return (i == 0 || e != ch[i - 1]); });
+        .filter(function(e, i, ch) { return (i == 0 || e != ch[i - 1]); });
       // Uniq is a list of uniq chars in word
       gameState.guessed = [];   // Array of correct guesses
       gameState.state = STARTING;
@@ -246,7 +263,7 @@ H5P.Hangman = (function($) {
      */
     function showFree() {
       var s = '';
-      gameState.free.forEach(function (ch) {
+      gameState.free.forEach(function(ch) {
         s += '<span class="h5p-hangman-freechar">' + ch + '</span>';
       })
       gameState.divAlphabeth.innerHTML = s;
@@ -281,7 +298,7 @@ H5P.Hangman = (function($) {
       var bs = word.split('');
       gameState.correct = true;
       gameState.divChar.innerHTML = '';
-      bs.forEach(function (ch) {
+      bs.forEach(function(ch) {
         var divBs = document.createElement('div');
         if (ch === ' ') {
           divBs.classList.add('h5p-hangman-space');
@@ -305,12 +322,12 @@ H5P.Hangman = (function($) {
    *
    * @param {jQuery} $container
    */
-  C.prototype.attach = function ($container) {
+  C.prototype.attach = function($container) {
     // Set class on container to identify it as a hangman game
     // container.  Allows for styling later.
     $container.addClass('h5p-hangman');
-    var myId = this.id;   // in case we have more than one instance active
-    var game = 
+    var myId = this.id;   // In case we have more than one instance active
+    var game =
           '<div id="h5p-hangman-' + myId + '">'
         +   '<div class="h5p-hangman-main">'
         +     '<canvas id="h5p-hangman-graf-' + myId + '" class="h5p-hangman-graf"></canvas>'
