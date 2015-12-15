@@ -1,24 +1,75 @@
 {
   "semantics": [
     {
-    "label": "Hangman tittel",
-    "default": "Hangman",
-    "description": "Tittel som vist til bruker"
-  },
-  {
-    "label": "Beskrivelse",
-    "default": "Gjett riktig ord",
-    "description": "Beskrivelse av mål-ord (byer i norge. osv)"
-  },
-  {
-    "label": "Alfabet",
-    "default": "abcdefghijklmnopqrstuvwxyzøæå",
-    "description": "Bokstaver brukt i ord"
-  },
-  {
-    "label": "Ordliste",
-    "placeholder": "oslo,bergen,trondheim",
-    "description": "Komma separerte ord"
-  }
+      "label": "Hangman tittel",
+      "default": "Hangman",
+      "description": "Tittel som vist til bruker"
+    },
+    {
+      "label": "Beskrivelse",
+      "default": "Gjett riktig ord",
+      "description": "Beskrivelse av mål-ord (byer i norge. osv)"
+    },
+    {
+      "label": "Alfabet",
+      "default": "abcdefghijklmnopqrstuvwxyzøæå",
+      "description": "Bokstaver brukt i ord"
+    },
+    {
+      "label": "Ordliste",
+      "description": "Grupper med komma-separerte ord. Hver gruppe kan ha hint.",
+      "field": {
+        "label": "Ordgrupper",
+        "fields": [
+          {
+            "placeholder": "ord,som,skal,gjettes",
+            "description": "Kommaseparert liste med ord",
+            "label": "Ord"
+          },
+          {
+            "placeholder": "hjelpehint",
+            "description": "Hint for å hjelpe bruker å gjette ordet",
+            "label": "Hjelpehint"
+          }
+        ]
+      }
+    },
+    {
+      "label": "Forsøk",
+      "description": "Hvor mange forsøk før du feiler."
+    },
+    {
+      "label": "Bruk hint",
+      "description": "Kryss av for å gjøre hint tilgjengelig"
+    },
+    {
+      "label": "UI oversettelse for hangman",
+      "fields": [
+        {
+          "label": "Riktig svar etikett",
+          "default": "Riktig"
+        },
+        {
+          "label": "Antall ord forsøkt etikett",
+          "default": "Antall ord"
+        },
+        {
+          "label": "Feil svar etikett",
+          "default": "Feil"
+        },
+        {
+          "label": "Riktig antall etikett",
+          "default": "Riktige ord"
+        },
+        {
+          "label": "Feil antall ord etikett",
+          "default": "Uriktige ord"
+        },
+        {
+          "label": "Prøv igjen etikett",
+          "default": "Prøv igjen"
+        }
+      ]
+    }
   ]
 }
