@@ -26,25 +26,43 @@ H5P.Hangman = (function($) {
     var _ui = options.UI;              // Grab hold of UI for text
     var STARTING = 'STARTING';
     var FAILED = 'FAILED';
+    gameState.hints = ['nohint'];
+    var res = [ [] ];
 
     // gameState.words = options.wordlist.split(',');
     // Wordlist is now an array of words + optional hint
     if (options.useHints) {
-      gameState.words = options.wordlist.reduce(function(res, ar) {
-        var ws = ar.words.split(',');
-        if (ar.hint) {  // A hint is defined for this group
-          res[ar.hint] = ws;
+      // Words with no hinst stored at idx 0
+      options.wordlist.forEach(function(el, idx) {
+        var ws = el.words.split(',');
+        if (el.hint) {  // A hint is defined for this group
+          res[idx+1] = ws;
+          gameState.hints[idx+1] = el.hint.split(',');
         } else {
-          res.nohint = res.nohint ? res.nohint.concat(ws) : ws;
+          res[0] = res[0].concat(ws);
         }
-      } ,{});
+      });
+      gameState.words = res;
     } else {
-      gameState.words = { nohint: options.wordlist.reduce(function(tot, ar) {
+      gameState.words = [ options.wordlist.reduce(function(tot, ar) {
         var ws = ar.words.split(',');
         return tot.concat(ws);
-      } ,[]), };
+      } ,[]) ];
     }
+    if (gameState.words[0].length === 0) {
+      gameState.words.shift();
+      gameState.hints.shift();
+      // Drop list used for words without hints if empty
+      // In the H5P-UI any words without hints are gathered together
+      //  and concated in gameState.words[0]
+    }
+    // gameState.words is now array of array of words
+    // gameState.hints is array of array of hints
+    // A group of words may have multiple hints
     console.log(gameState);
+    
+    // As part of setup we create refs to all divs that are altered.
+    // We also set up default/starting values
     gameState.attempts = options.attempts || 6;
     gameState.alphabeth = options.alphabeth
                           || 'abcdefghijklmnopqrstuvwxyz';
@@ -53,6 +71,10 @@ H5P.Hangman = (function($) {
     gameState.draw = prepDraw(ctx);           // Initialize drawing state
     gameState.qsAlphabeth = '#h5p-hangman-alphabeth-' + myId;
     gameState.divAlphabeth = document.querySelector(gameState.qsAlphabeth);
+    gameState.divHints = document.querySelector('#h5p-hangman-' 
+                            + myId + ' .h5p-hangman-hints');
+    gameState.divHintText = document.querySelector('#h5p-hangman-' 
+                            + myId + ' .h5p-hangman-htext');
     gameState.qsChar = '#h5p-hangman-letters-' + myId
     gameState.divChar = document.querySelector(gameState.qsChar);
     gameState.seenWords = [];
@@ -116,11 +138,16 @@ H5P.Hangman = (function($) {
      */
     function newWord() {
       var i = 0;
+      var group;
       var word;
+      var wordlist;
       var search = true;
       var words = gameState.words;
+      // Array of array of words
       while (i < 20 && search) {
-        word = words[Math.floor(Math.random() * words.length)];
+        group = Math.floor(Math.random() * words.length);
+        wordlist = words[group];
+        word = wordlist[Math.floor(Math.random() * wordlist.length)];       
         word = word.replace(/ +/g, ' ');  // Trim duplix space
         search = gameState.seenWords.indexOf(word) >= 0;
         i++;
@@ -129,16 +156,17 @@ H5P.Hangman = (function($) {
         // This is a new word, remember it
         gameState.seenWords.push(word);
       }
-      initGame(word.toLowerCase());
+      initGame(word.toLowerCase(), group);
       playGame();
     }
 
     /**
      * Set up start-state for game
      *
-     * @param{string} word - word to guess
+     * @param {string} word - word to guess
+     * @param {int} group - word group index, any hints refd by this idx
      */
-    function initGame(word) {
+    function initGame(word, group) {
       gameState.failed = 0;   // Number of failed chars
       gameState.free = gameState.alphabeth.split('');
       // Unused chars
@@ -148,7 +176,31 @@ H5P.Hangman = (function($) {
       // Uniq is a list of uniq chars in word
       gameState.guessed = [];   // Array of correct guesses
       gameState.state = STARTING;
+      gameState.myHints = gameState.hints.length 
+           ?   gameState.hints[group]
+           :   [ ];
+      gameState.hintsUsed = 0;
+      if (gameState.myHints.length) {
+        // We have some hints to show
+        gameState.divHints.innerHTML = gameState.myHints.length;
+        gameState.divHints.onclick = function(e) {
+          if (gameState.hintsUsed >= gameState.myHints.length) {
+            return;
+          }
+          gameState.divHintText.innerHTML = gameState.myHints[gameState.hintsUsed];
+          gameState.divHintText.classList.add('fadeio');
+          gameState.divHintText.addEventListener('animationend', hideHint);
+          gameState.hintsUsed ++;
+          gameState.divHints.innerHTML = gameState.myHints.length - gameState.hintsUsed;
+        }
+      } else {
+        gameState.divHints.innerHTML = '';
+      }
       showFree();
+      
+      function hideHint(e) {
+        gameState.divHintText.classList.remove('fadeio');
+      }
     }
 
     /**
@@ -260,6 +312,7 @@ H5P.Hangman = (function($) {
 
     /**
      * Show unused chars
+     * Show remaining hints - if any
      */
     function showFree() {
       var s = '';
@@ -333,6 +386,8 @@ H5P.Hangman = (function($) {
         +     '<canvas id="h5p-hangman-graf-' + myId + '" class="h5p-hangman-graf"></canvas>'
         +     '<div  id="h5p-hangman-alphabeth-' + myId + '" class="h5p-hangman-alphabeth">' 
                       + this.options.wordlist + '</div>'
+        +     '<div class="h5p-hangman-hints"></div>'
+        +     '<div class="h5p-hangman-htext"></div>'                  
         +   '</div>'
         +   '<div class="h5p-hangman-letters" id="h5p-hangman-letters-' + myId + '"></div>'
         + '</div>';

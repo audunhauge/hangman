@@ -16,6 +16,7 @@
 }
 
 .h5p-hangman-main {
+  position:relative;
   display:flex;
   min-height:20em;
   max-width:32em;
@@ -38,6 +39,41 @@
   min-height:8em;
   flex:1;
   order:2;
+}
+
+.h5p-hangman-hints {
+  position:absolute;
+  background: green;
+  width: 2em;
+  height: 2em;
+  border-radius: 1em;
+  bottom: 2em;
+  right:2em;
+  text-align:center;
+  padding-top:2px;
+  color:white;
+}
+
+.h5p-hangman-htext {
+  opacity: 0;
+  position:absolute;
+  background: rgba(30,30,200,0.6);
+  width: 6em;
+  border-radius: 0.3em;
+  top: 1em;
+  left:2em;
+  text-align:center;
+  padding-top:2px;
+  color:white;
+}
+
+.fadeio {
+  animation: fadeInOut 4s;
+}
+
+@keyframes fadeInOut {
+  10% { opacity: 1; }
+  90% { opacity: 1; }
 }
 
 .h5p-hangman-feedback div {
