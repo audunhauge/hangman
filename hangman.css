@@ -44,9 +44,9 @@
 .h5p-hangman-hints {
   position:absolute;
   background: green;
-  width: 2em;
+  width: 3em;
   height: 2em;
-  border-radius: 1em;
+  border-radius: 0.5em;
   bottom: 2em;
   right:2em;
   text-align:center;

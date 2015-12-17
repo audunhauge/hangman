@@ -28,7 +28,7 @@
     "description": "Groups of comma separated words. Each group can have optional hint.",
     "min":1,
     "field": {
-       "label":"Wordgroup",
+       "label":"Wordgroups",
        "type":"group",
        "name":"wordgroup",
        "fields": [
@@ -37,7 +37,7 @@
            "type":"text",
            "placeholder":"words,to,guess",
            "description":"Comma separated list of words",
-           "label":"Word group"
+           "label":"Words"
           },
           {
            "name":"hint",

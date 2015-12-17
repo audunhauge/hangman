@@ -26,7 +26,7 @@ H5P.Hangman = (function($) {
     var _ui = options.UI;              // Grab hold of UI for text
     var STARTING = 'STARTING';
     var FAILED = 'FAILED';
-    gameState.hints = ['nohint'];
+    gameState.hints = [];
     var res = [ [] ];
 
     // gameState.words = options.wordlist.split(',');
@@ -193,7 +193,7 @@ H5P.Hangman = (function($) {
           gameState.hintsUsed ++;
           gameState.divHints.innerHTML = gameState.myHints.length - gameState.hintsUsed;
         }
-      } else {
+      } else if (gameState.divHints) {
         gameState.divHints.innerHTML = '';
       }
       showFree();
@@ -386,7 +386,8 @@ H5P.Hangman = (function($) {
         +     '<canvas id="h5p-hangman-graf-' + myId + '" class="h5p-hangman-graf"></canvas>'
         +     '<div  id="h5p-hangman-alphabeth-' + myId + '" class="h5p-hangman-alphabeth">' 
                       + this.options.wordlist + '</div>'
-        +     '<div class="h5p-hangman-hints"></div>'
+        // If useHints is checked add button for hints
+        + ((this.options.useHints) ? '<button type="button" class="h5p-hangman-hints"></button>' : '' )
         +     '<div class="h5p-hangman-htext"></div>'                  
         +   '</div>'
         +   '<div class="h5p-hangman-letters" id="h5p-hangman-letters-' + myId + '"></div>'
