@@ -20,7 +20,7 @@ H5P.Hangman = (function($) {
    * @private
    */
   function setup(options, myId) {
-    // qs prefix stands for querySelector
+    // The qs prefix stands for querySelector
 
     var gameState = {};        // Keep track of score,words seen etc
     var _ui = options.UI;              // Grab hold of UI for text
@@ -29,15 +29,15 @@ H5P.Hangman = (function($) {
     gameState.hints = [];
     var res = [ [] ];
 
-    // gameState.words = options.wordlist.split(',');
+    // GameState.words = options.wordlist.split(',');
     // Wordlist is now an array of words + optional hint
     if (options.useHints) {
       // Words with no hinst stored at idx 0
       options.wordlist.forEach(function(el, idx) {
         var ws = el.words.split(',');
         if (el.hint) {  // A hint is defined for this group
-          res[idx+1] = ws;
-          gameState.hints[idx+1] = el.hint.split(',');
+          res[idx + 1] = ws;
+          gameState.hints[idx + 1] = el.hint.split(',');
         } else {
           res[0] = res[0].concat(ws);
         }
@@ -93,7 +93,7 @@ H5P.Hangman = (function($) {
      */
     function prepDraw(ctx) {
       var hang = [];
-      ctx.lineWidth = 4;
+      ctx.lineWidth = 6;
       // Very rough drawing as a start
       hang.push(function() { ctx.lineTo(120.5, 50); });
       hang.push(function() { ctx.lineTo(120.5, 20); });
@@ -197,7 +197,7 @@ H5P.Hangman = (function($) {
         gameState.divHints.innerHTML = '';
       }
       showFree();
-      
+
       function hideHint(e) {
         gameState.divHintText.classList.remove('fadeio');
       }
