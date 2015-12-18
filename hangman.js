@@ -59,19 +59,17 @@ H5P.Hangman = (function($) {
     // gameState.words is now array of array of words
     // gameState.hints is array of array of hints
     // A group of words may have multiple hints
-    console.log(gameState);
+    // DEBUG console.log(gameState);
     
     // As part of setup we create refs to all divs that are altered.
     // We also set up default/starting values
     gameState.attempts = options.attempts || 6;
     gameState.alphabeth = options.alphabeth
                           || 'abcdefghijklmnopqrstuvwxyz';
-    gameState.qsGraf = '#h5p-hangman-graf-' + myId;
-    var ctx = document.querySelector(gameState.qsGraf).getContext('2d');
-    gameState.draw = prepDraw(ctx);           // Initialize drawing state
+    gameState.draw = prepDraw();           // Initialize drawing functions
     gameState.qsAlphabeth = '#h5p-hangman-alphabeth-' + myId;
     gameState.divAlphabeth = document.querySelector(gameState.qsAlphabeth);
-    gameState.divHints = document.querySelector('#h5p-hangman-' 
+    gameState.btnHints = document.querySelector('#h5p-hangman-' 
                             + myId + ' .h5p-hangman-hints');
     gameState.divHintText = document.querySelector('#h5p-hangman-' 
                             + myId + ' .h5p-hangman-htext');
@@ -88,25 +86,22 @@ H5P.Hangman = (function($) {
      * Create array of drawing commands, return driving function
      *
      * @private
-     * @param {Context2d} ctx  2d context for canvas
      * @returns {func} function closure for drawing hangman
      */
-    function prepDraw(ctx) {
+    function prepDraw() {
       var hang = [];
-      ctx.lineWidth = 6;
-      // Very rough drawing as a start
-      hang.push(function() { ctx.lineTo(120.5, 50); });
-      hang.push(function() { ctx.lineTo(120.5, 20); });
-      hang.push(function() { ctx.lineTo(150.5, 20); });
-      hang.push(function() { ctx.lineTo(150.5, 50); });
-      hang.push(function() { ctx.arc(150, 60, 10, 0, 2 * Math.PI, true); });
-      hang.push(function() { ctx.lineTo(150.5, 70); });
-      hang.push(function() { ctx.lineTo(150.5, 90); });
-      hang.push(function() { ctx.lineTo(160.5, 100); ctx.moveTo(150.5, 90); });
-      hang.push(function() { ctx.lineTo(140.5, 100); });
-      hang.push(function() { ctx.moveTo(150.5, 70); ctx.lineTo(130.5, 80); });
-      hang.push(function() { ctx.moveTo(150.5, 70); ctx.lineTo(170.5, 80); });
-      hang.push(function() { ctx.moveTo(150.5, 70); ctx.lineTo(170.5, 80); });
+      hang.push(function() { $('.draw1').addClass("doshow"); });
+      hang.push(function() { $('.draw2').addClass("doshow"); });
+      hang.push(function() { $('.draw3').addClass("doshow"); });
+      hang.push(function() { $('.draw4').addClass("doshow"); });
+      hang.push(function() { $('.draw5').addClass("doshow"); });
+      hang.push(function() { $('.draw6').addClass("doshow"); });
+      hang.push(function() { $('.draw7').addClass("doshow"); });
+      hang.push(function() { $('.draw8').addClass("doshow"); });
+      hang.push(function() { $('.draw9').addClass("doshow"); $('.drawA').addClass("doshow"); });
+      hang.push(function() { $('.drawB').addClass("doshow"); $('.drawC').addClass("doshow"); });
+      hang.push(function() { $('.drawD').addClass("doshow"); $('.drawE').addClass("doshow"); });
+      
       /**
        * Drawing function with hang as closure
        *
@@ -115,20 +110,11 @@ H5P.Hangman = (function($) {
        */
       return function(n, m) {
         var i;
-        n = Math.min(hang.length - 1, Math.floor(hang.length / m) * n);
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        // Start on clean canvas
-
-        ctx.fillStyle = 'rgba(30,153,255,0.8)';
-        ctx.fillRect(18.5, 120, 190.5, 4);
-        // Draw a base for the hangman to stand on
-
-        ctx.beginPath();
-        ctx.moveTo(120, 120);
+        $('.noshow').removeClass('doshow');
+        n = Math.min(hang.length, Math.round(n * hang.length / m));
         for (i = 0; i < n; i++) {
           hang[i]();  // Draw as many segments as specified by n
         }
-        ctx.stroke();
       }
     }
 
@@ -182,8 +168,9 @@ H5P.Hangman = (function($) {
       gameState.hintsUsed = 0;
       if (gameState.myHints.length) {
         // We have some hints to show
-        gameState.divHints.innerHTML = gameState.myHints.length;
-        gameState.divHints.onclick = function(e) {
+        gameState.btnHints.classList.remove('h5p-hangman-droppy');
+        gameState.btnHints.innerHTML = _ui.hints + ':' + gameState.myHints.length;
+        gameState.btnHints.onclick = function(e) {
           if (gameState.hintsUsed >= gameState.myHints.length) {
             return;
           }
@@ -191,11 +178,14 @@ H5P.Hangman = (function($) {
           gameState.divHintText.classList.add('fadeio');
           gameState.divHintText.addEventListener('animationend', hideHint);
           gameState.hintsUsed ++;
-          gameState.divHints.innerHTML = gameState.myHints.length - gameState.hintsUsed;
+          gameState.btnHints.innerHTML =  _ui.hints + ':' + (gameState.myHints.length - gameState.hintsUsed);
+           if (gameState.hintsUsed >= gameState.myHints.length) {
+            gameState.btnHints.classList.add('h5p-hangman-droppy');
+            // This hides the hint button
+          }
         }
-      } else if (gameState.divHints) {
-        gameState.divHints.innerHTML = '';
-      }
+      } 
+      
       showFree();
 
       function hideHint(e) {
@@ -382,15 +372,33 @@ H5P.Hangman = (function($) {
     var myId = this.id;   // In case we have more than one instance active
     var game =
           '<div id="h5p-hangman-' + myId + '">'
+        +   '<div class="h5p-hangman-letters" id="h5p-hangman-letters-' + myId + '"></div>'
         +   '<div class="h5p-hangman-main">'
-        +     '<canvas id="h5p-hangman-graf-' + myId + '" class="h5p-hangman-graf"></canvas>'
+        +     '<div class="h5p-hangman-graf">'
+        +      '<div class="h5p-hangman-draw">'
+        +        '<div class="h5p-hangman-draw draw0"></div>'
+        +        '<div class="h5p-hangman-draw draw1 noshow"></div>'
+        +        '<div class="h5p-hangman-draw draw2 noshow"></div>'
+        +        '<div class="h5p-hangman-draw draw3 noshow"></div>'
+        +        '<div class="h5p-hangman-draw draw4 noshow"></div>'
+        +        '<div class="h5p-hangman-draw draw5 noshow"></div>'
+        +        '<div class="h5p-hangman-draw draw6 noshow"></div>'
+        +        '<div class="h5p-hangman-draw draw7 noshow"></div>'
+        +        '<div class="h5p-hangman-draw draw8 noshow"></div>'
+        +        '<div class="h5p-hangman-draw draw9 noshow"></div>'
+        +        '<div class="h5p-hangman-draw drawA noshow"></div>'
+        +        '<div class="h5p-hangman-draw drawB noshow"></div>'
+        +        '<div class="h5p-hangman-draw drawC noshow"></div>'
+        +        '<div class="h5p-hangman-draw drawD noshow"></div>'
+        +        '<div class="h5p-hangman-draw drawE noshow"></div>'
+        +      '</div>'
+        +     '</div>'
         +     '<div  id="h5p-hangman-alphabeth-' + myId + '" class="h5p-hangman-alphabeth">' 
                       + this.options.wordlist + '</div>'
         // If useHints is checked add button for hints
         + ((this.options.useHints) ? '<button type="button" class="h5p-hangman-hints"></button>' : '' )
         +     '<div class="h5p-hangman-htext"></div>'                  
         +   '</div>'
-        +   '<div class="h5p-hangman-letters" id="h5p-hangman-letters-' + myId + '"></div>'
         + '</div>';
     $container.append('<div class="hangman-text">'
              + this.options.greeting + '</div>' + game);

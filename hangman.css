@@ -44,7 +44,7 @@
 .h5p-hangman-hints {
   position:absolute;
   background: green;
-  width: 3em;
+  width: 5em;
   height: 2em;
   border-radius: 0.5em;
   bottom: 2em;
@@ -52,28 +52,30 @@
   text-align:center;
   padding-top:2px;
   color:white;
+  cursor: pointer;
 }
 
 .h5p-hangman-htext {
   opacity: 0;
   position:absolute;
-  background: rgba(30,30,200,0.6);
-  width: 6em;
+  background: rgba(30,30,200,0.9);
+  width: 5em;
   border-radius: 0.3em;
-  top: 1em;
-  left:2em;
+  bottom: 2em;
+  right:2em;
   text-align:center;
   padding-top:2px;
   color:white;
+  z-index: -1;
 }
 
 .fadeio {
-  animation: fadeInOut 4s;
+  animation: fadeInOut 3s;
 }
 
 @keyframes fadeInOut {
-  10% { opacity: 1; }
-  90% { opacity: 1; }
+  30% { z-index: 20; opacity: 1;  bottom: 12em; width: 9em; }
+  90% { z-index: 20; opacity: 1;  bottom: 12em; width: 9em; }
 }
 
 .h5p-hangman-feedback div {
@@ -101,6 +103,9 @@
 
 .h5p-hangman-letters {
   height:2em;
+  position: absolute;
+  left: 2em;
+  top: 2em;
 }
 
 .h5p-hangman-correct {
@@ -130,6 +135,7 @@
 
 .h5p-hangman-droppy {
   animation: dropme 1s;
+  animation-fill-mode: forwards;
 }
 
 @keyframes dropme {

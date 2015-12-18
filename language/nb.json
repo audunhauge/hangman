@@ -66,6 +66,10 @@
           "default": "Uriktige ord"
         },
         {
+          "label": "Antall hints etikett",
+          "default": "Hint"
+        },
+        {
           "label": "Prøv igjen etikett",
           "default": "Prøv igjen"
         }

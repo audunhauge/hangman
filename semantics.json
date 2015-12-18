@@ -105,6 +105,12 @@
         "default": "Words failed"
       },
       {
+        "name": "hints",
+        "type": "text",
+        "label": "Number of hints label",
+        "default": "Hints"
+      },
+      {
         "name": "tryAgainButton",
         "type": "text",
         "label": "Retry button label",

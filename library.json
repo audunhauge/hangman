@@ -16,6 +16,7 @@
     { "path": "hangman.js" }
   ],
   "preloadedCss": [
-    {"path": "hangman.css"}
+    {"path": "hangman.css"},
+    {"path": "hangmanDraw.css"}
   ]
 }

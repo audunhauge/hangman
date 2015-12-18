@@ -1,0 +1,131 @@
+/* all draw0 .. drawE are divs for drawing then hangman */
+
+.h5p-hangman-draw {
+  position: absolute;
+  top: -2em;
+  left: 0;
+}
+
+
+
+.h5p-hangman-draw.noshow {
+  opacity:0;
+}
+
+.h5p-hangman-draw.doshow {
+  opacity: 1;
+}
+
+
+.h5p-hangman-draw.draw0 { /* the ground */
+  width: 10em;
+  height: 1em;
+  left: 3em;
+  top: 20em;
+  border-top-left-radius: 2em;
+  border-top-right-radius: 2em;
+  background: linear-gradient(to right,#020,#383 40%, #464 60%, #020);
+  opacity: 1;   /* can always see the ground */
+}
+.h5p-hangman-draw.draw1, .h5p-hangman-draw.draw2, .h5p-hangman-draw.draw3 {
+  width: 1em;        /* the standing pole */
+  height: 5em;
+  left: 5em;
+  top: 15em;
+  background: linear-gradient(to right,black,#530 40%, #530 60%, black);
+}
+.h5p-hangman-draw.draw2 {
+  top: 10em;
+}
+.h5p-hangman-draw.draw3 {
+  top: 5em;
+}
+.h5p-hangman-draw.draw4, .h5p-hangman-draw.draw5 {
+  width: 3em;            /* the cross piece  */
+  height: 1em;
+  left: 5em;
+  top: 5em;
+  background: linear-gradient(to top,black,#530 40%, #530 60%, black);
+}
+.h5p-hangman-draw.draw5 {
+  left: 8em;
+}
+
+.h5p-hangman-draw.draw6 {
+  width: 0.3em;            /* the rope  */
+  height: 3em;
+  left: 11em;
+  top: 5em;
+  background: linear-gradient(to top,black,#530 40%, black 60%, #530 80%, black);
+}
+
+.h5p-hangman-draw.draw7 {
+  width: 1.8em;            /* the head  */
+  height: 2.2em;
+  left: 10em;
+  border-radius: 1.4em;
+  border-bottom-left-radius: 1.1em;
+  border-bottom-right-radius: 1.4em;
+  top: 7.9em;
+  border: 0.3em solid black;
+}
+
+.h5p-hangman-draw.draw8 {
+  width: 0.5em;            /* the body  */
+  height: 4em;
+  left: 10.9em;
+  top: 10.4em;
+  background: black;
+}
+
+.h5p-hangman-draw.draw9 {
+  width: 0.5em;            /* left arm  */
+  height: 2em;
+  left: 10.2em;
+  top: 11em;
+  background: black;
+  transform: rotate(45deg);
+}
+
+.h5p-hangman-draw.drawA {
+  width: 0.5em;            /* right arm  */
+  height: 2em;
+  left: 11.6em;
+  top: 11em;
+  background: black;
+  transform: rotate(-45deg);
+}
+.h5p-hangman-draw.drawB {
+  width: 0.5em;            /* left leg  */
+  height: 2em;
+  left: 10.4em;
+  top: 14em;
+  background: black;
+  transform: rotate(30deg);
+}
+
+.h5p-hangman-draw.drawC {
+  width: 0.5em;            /* right leg  */
+  height: 2em;
+  left: 11.4em;
+  top: 14em;
+  background: black;
+  transform: rotate(-30deg);
+}
+.h5p-hangman-draw.drawD, .h5p-hangman-draw.drawE {
+  width: 0.5em;            /* left eye  */
+  height: 0.2em;
+  left: 10.5em;
+  top: 9em;
+  background: black;
+  border-top-left-radius: 0.2em;
+  border-top-right-radius: 0.2em;
+  animation: blink 2s alternate infinite;
+}
+.h5p-hangman-draw.drawE {
+  left: 11.5em;    /* right eye  */
+}
+
+@keyframes blink {  /* blinken-eyes */
+  100% { transform: scaleY(0.2); }
+}
